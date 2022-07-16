@@ -66,7 +66,7 @@ col2.text(x*P_future)
 col1, col2 = st.columns(2)
 col1.write("All Value")
 col2.text(y+x*P_future)
-
+ 
 col1, col2 = st.columns(2)
 col1.subheader("Loss")
 col2.subheader(-y_future - x_future * P_future + y+x*P_future)
