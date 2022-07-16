@@ -20,7 +20,11 @@ x=max(0,(np.sqrt(P_min)/P - 1/np.sqrt(P_max))*L+y/P)
 st.write("Token0 in Pool:")
 st.text(x)
 
-prices = np.arange(1,2*P_max+1,1)
+lower_bound = P_min/10000
+upper_bound = 2.1*P_max
+step = upper_bound/10000
+prices = np.arange(P_min/1000,2*P_max+1,step)
+
 loss = []
 for price in prices:
     x_future = max(0,L*(min(1/np.sqrt(P_min),1/np.sqrt(price))-1/np.sqrt(P_max)))
