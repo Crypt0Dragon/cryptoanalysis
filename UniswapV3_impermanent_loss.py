@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import pandas as pd
 import numpy as np
-import math
+
 
 st.title("Uniswap V3 Impermanent Loss")
 st.subheader("Input")
@@ -15,16 +15,16 @@ P_min = col1.number_input("Min Price",value=1000)
 P_max = col2.number_input("Max Price",value=1200)
 
 y = st.number_input('Token1 in Pool', value=100)
-L=(math.sqrt(P_min)/P + 1/math.sqrt(P))/(1-P_min/P)*y                                                                                 
-x=max(0,(math.sqrt(P_min)/P - 1/math.sqrt(P_max))*L+y/P)
+L=(np.sqrt(P_min)/P + 1/np.sqrt(P))/(1-P_min/P)*y                                                                                 
+x=max(0,(np.sqrt(P_min)/P - 1/np.sqrt(P_max))*L+y/P)
 st.write("Token0 in Pool:")
 st.text(x)
 
 prices = np.arange(1,2*P_max+1,1)
 loss = []
 for price in prices:
-    x_future = max(0,L*(min(1/math.sqrt(P_min),1/math.sqrt(price))-1/math.sqrt(P_max)))
-    y_future = max(0,L*(min(math.sqrt(P_max),math.sqrt(price))-math.sqrt(P_min)))
+    x_future = max(0,L*(min(1/np.sqrt(P_min),1/np.sqrt(price))-1/np.sqrt(P_max)))
+    y_future = max(0,L*(min(np.sqrt(P_max),np.sqrt(price))-np.sqrt(P_min)))
     loss.append(-y_future - x_future * price + y+x*price)
 
 df=pd.DataFrame()
@@ -40,8 +40,8 @@ st.subheader("Impermanent Loss Calculation")
 
 P_future= st.number_input('Future Price', value=P)
 
-x_future = max(0,L*(min(1/math.sqrt(P_min),1/math.sqrt(P_future))-1/math.sqrt(P_max)))
-y_future = max(0,L*(min(math.sqrt(P_max),math.sqrt(P_future))-math.sqrt(P_min)))
+x_future = max(0,L*(min(1/np.sqrt(P_min),1/np.sqrt(P_future))-1/np.sqrt(P_max)))
+y_future = max(0,L*(min(np.sqrt(P_max),np.sqrt(P_future))-np.sqrt(P_min)))
 
 
 
