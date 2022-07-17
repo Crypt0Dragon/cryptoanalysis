@@ -9,13 +9,13 @@ import numpy as np
 st.title("Uniswap V3 Impermanent Loss Hedging")
 st.subheader("Strategy: Enter LP at max price at 100% USD, hedging with put option at DCA strike")
 
-P = st.number_input('Max Price', value=1200)
+P = st.number_input('Max Price', value=1200.0)
 P_max = P
 
 col1, col2 = st.columns(2)
-P_min = col1.number_input("Min Price",value=800)
+P_min = col1.number_input("Min Price",value=800.0)
 
-y = st.number_input('USD Token in Pool', value=100)
+y = st.number_input('USD Token in Pool', value=100.0)
 L=(np.sqrt(P_min)/P + 1/np.sqrt(P))/(1-P_min/P)*y
 #x_min = 100% position in token x when price hits P_min                                                                                 
 x_min = L*(1/np.sqrt(P_min)-1/np.sqrt(P_max))

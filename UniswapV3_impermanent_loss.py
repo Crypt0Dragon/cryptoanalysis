@@ -9,12 +9,12 @@ import numpy as np
 st.title("Uniswap V3 Impermanent Loss")
 st.subheader("Input")
 
-P = st.number_input('Current Price', value=1200)
+P = st.number_input('Current Price', value=1200.00)
 col1, col2 = st.columns(2)
-P_min = col1.number_input("Min Price",value=1000)
-P_max = col2.number_input("Max Price",value=1200)
+P_min = col1.number_input("Min Price",value=1000.00)
+P_max = col2.number_input("Max Price",value=1200.00)
 
-y = st.number_input('Token1 in Pool', value=100)
+y = st.number_input('Token1 in Pool', value=100.00)
 L=(np.sqrt(P_min)/P + 1/np.sqrt(P))/(1-P_min/P)*y                                                                                 
 x=max(0,(np.sqrt(P_min)/P - 1/np.sqrt(P_max))*L+y/P)
 st.write("Token0 in Pool:")
