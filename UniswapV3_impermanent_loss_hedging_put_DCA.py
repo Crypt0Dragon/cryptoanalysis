@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import pandas as pd
 import numpy as np
+from gvol import GVol
+import datetime as dt
 
 
 st.title("Uniswap V3 Impermanent Loss Hedging")
@@ -66,3 +68,33 @@ fig = px.line(df, x="Price", y="PNL", title='PNL, LP with put hedging')
 fig.update_xaxes(title_text='Price')
 fig.update_yaxes(title_text='PNL')
 st.plotly_chart(fig,use_container_width=True)
+
+gvol_client = GVol(header='gvol-lite',gvol_api_key=st.secrets["API_KEY"])
+exchange = 'deribit'
+symbol = 'ETH'
+
+data = gvol_client.options_orderbook_details(exchange = exchange)
+df = pd.DataFrame(data = data["UtilityRealtimeOptionbook"])
+df["date_expiration"] = pd.to_datetime(df['expiration'], unit='ms').dt.strftime('%Y-%m-%d %H:%M')
+
+df = df[(df["currency"] == symbol) & (df["putCall"] == "P") ].sort_values(by="expiration").reset_index(drop=True)
+
+#for each expiry, find the strikes closest to DCA price
+closest_strikes_indices_all = []
+df["date_expiration"].unique()
+for date_expiry in df["date_expiration"].unique():
+    df_new = df[df["date_expiration"] == date_expiry]
+    closest_strikes_indices = df_new.iloc[(df_new['strike']-P_DCA).abs().argsort()[:2]].index.tolist()
+    for index in closest_strikes_indices:
+        closest_strikes_indices_all.append(index)
+df_closest_strikes = df.iloc[closest_strikes_indices_all,:][["date_expiration","currency","strike","usdAsk"]]
+
+#calculate the total cost of hedging with x_min put options
+df_closest_strikes["Total put costs"] = x_min * df_closest_strikes["usdAsk"]
+
+with st.form("fetch_options_data"):
+
+    submitted = st.form_submit_button("Fetch options data")
+    if submitted:
+        st.subheader("Deribit ETH options")
+        st.dataframe(df_closest_strikes)
