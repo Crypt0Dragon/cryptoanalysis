@@ -3,3 +3,4 @@ plotly
 numpy
 matplotlib
 gvol
+scipy
