@@ -94,4 +94,4 @@ df = pd.DataFrame([["Vanilla put, Strike = " + str(B_knockin), euro_option(P, B_
 df["Percentage of notional, notional = " +str(K_put) + " (strike put)"] = df["Percentage of notional, notional = " +str(K_put) + " (strike put)"].map(lambda n: '{:,.3%}'.format(n))
 st.dataframe(df)
 
-st.write("Discount: " ,   "{:.02%}".format(1-knockin_put(P, K_put, T, r, sigma_B, B_knockin)/euro_option(P, K_put, T, r, sigma_B, 'put')) )
+st.write("Discount: " ,   "{:.02%}".format(1-knockin_put(P, K_put, T, r, sigma_B, B_knockin)/euro_option(P, K_put, T, r, sigma_K, 'put')) )
