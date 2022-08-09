@@ -85,12 +85,13 @@ fig.update_xaxes(title_text='Price')
 fig.update_yaxes(title_text='Payoff')
 col2.plotly_chart(fig,use_container_width=True)
 
-df = pd.DataFrame([["Vanilla put, Strike = " + str(B_knockin), euro_option(P, B_knockin, T, r, sigma_B, 'put')],
-                   ["Binary put, Strike = "+ str(B_knockin) +", Notional = " +str(K_put - B_knockin), (K_put - B_knockin) * euro_option(P, B_knockin, T, r, sigma_B, 'binary put')],
-                  ["Knockin put, Strike = "+ str(K_put) +", lower barrier = " +str(B_knockin) + " (Sum of above two options)", knockin_put(P, K_put, T, r, sigma_B, B_knockin)],
-                  ["Compare with: Vanilla put, Strike = " + str(K_put), euro_option(P, K_put, T, r, sigma_B, 'put')]],
-                  columns=["Hedging Instrument", "Black-Scholes Price"])
+df = pd.DataFrame([["Vanilla put, Strike = " + str(B_knockin), euro_option(P, B_knockin, T, r, sigma_B, 'put'),euro_option(P, B_knockin, T, r, sigma_B, 'put')/K_put],
+                   ["Binary put, Strike = "+ str(B_knockin) +", Notional = " +str(K_put - B_knockin), (K_put - B_knockin) * euro_option(P, B_knockin, T, r, sigma_B, 'binary put'),(K_put - B_knockin) * euro_option(P, B_knockin, T, r, sigma_B, 'binary put')/K_put],
+                  ["Knockin put, Strike = "+ str(K_put) +", lower barrier = " +str(B_knockin) + " (Sum of above two options)", knockin_put(P, K_put, T, r, sigma_B, B_knockin), knockin_put(P, K_put, T, r, sigma_B, B_knockin)/K_put],
+                  ["Compare with: Vanilla put, Strike = " + str(K_put), euro_option(P, K_put, T, r, sigma_K, 'put'), euro_option(P, K_put, T, r, sigma_K, 'put')/K_put]],
+                  columns=["Hedging Instrument", "Black-Scholes Price", "Percentage of notional, notional = " +str(K_put) + " (strike put)"])
 
+df["Percentage of notional, notional = " +str(K_put) + " (strike put)"] = df["Percentage of notional, notional = " +str(K_put) + " (strike put)"].map(lambda n: '{:,.3%}'.format(n))
 st.dataframe(df)
 
 st.write("Discount: " ,   "{:.02%}".format(1-knockin_put(P, K_put, T, r, sigma_B, B_knockin)/euro_option(P, K_put, T, r, sigma_B, 'put')) )
