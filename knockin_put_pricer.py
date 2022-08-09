@@ -20,7 +20,7 @@ r = r_in_percent/100
 sigma_B_in_percent = st.number_input('Implied Volatility at down and in barrier in %', value = 90.000, step=0.0001)
 sigma_B = sigma_B_in_percent / 100
 sigma_K_in_percent = st.number_input('Implied Volatility at put strike, in %', value = 90.000, step=0.0001)
-sigma_K = sigma_B_in_percent / 100
+sigma_K = sigma_K_in_percent / 100
 
 def euro_option(S, K, T, r, sigma, option = 'call'):
     
